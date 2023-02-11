@@ -4,33 +4,66 @@ import socketserver
 import io
 import cgi
 import logging
+import hashlib
 
 import settings
 
 logger = logging.getLogger(__name__)
 
 
+class Cmder:
+    def __init__(self):
+        self.__cmd_map = {
+            "md5": self.md5,
+        }
+
+    def execute(self, cmd, filename, data, *args, **kwargs):
+        return self.__cmd_map[cmd](filename, data, *args, **kwargs)
+
+    def is_cmd_supported(self, cmd):
+        return cmd in self.__cmd_map.keys()
+
+    def md5(self, filename, data, *args, **kwargs):
+        m = hashlib.md5()
+        m.update(data)
+        h = m.hexdigest()
+        return (
+            True,
+            f"{filename}: {h}",
+        )
+
+
 class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        self.cmder = Cmder()
+        super().__init__(*args, **kwargs)
+
     def do_POST(self):
-        ret, info = self.deal_post_data()
-        logger.info(f"{ret} {info} by {self.client_address}")
+        ret, info = self.post_cmder()
+        logger.info(f"{ret} {info} by {self.client_address}: {self.path}")
         with io.BytesIO() as f:
+            http_status = 400
             if ret:
-                f.write(b"Success\n")
+                f.write(f"{info}\n".encode())
+                http_status = 200
             else:
-                f.write(b"Failed\n")
+                f.write(f"Failed: {info}\n".encode())
+                http_status = 400
             length = f.tell()
             f.seek(0)
-            self.send_response(200)
+            self.send_response(http_status)
             self.send_header("Content-type", "text/plain")
             self.send_header("Content-Length", str(length))
             self.end_headers()
             self.copyfile(f, self.wfile)
 
-    def deal_post_data(self):
-        ctype, pdict = cgi.parse_header(self.headers["Content-Type"])
-        pdict["boundary"] = bytes(pdict["boundary"], "utf-8")
-        pdict["CONTENT-LENGTH"] = int(self.headers["Content-Length"])
+    def post_cmder(self):
+        cmd = self.path[1:]
+        if not self.cmder.is_cmd_supported(cmd):
+            return (False, "Cmd doesn't supported")
+
+        ctype, _ = cgi.parse_header(self.headers["Content-Type"])
+        msg = ""
         if ctype == "multipart/form-data":
             form = cgi.FieldStorage(
                 fp=self.rfile,
@@ -43,17 +76,32 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             try:
                 if isinstance(form["file"], list):
                     for record in form["file"]:
-                        with open(f"./{record.filename}", "wb") as f:
-                            f.write(record.file.read())
+                        filename = record.name
+                        file_content = record.file.read()
+                        msg += f" {filename} ".center(40, "=") + "\n"
+                        ret, result = self.cmder.execute(cmd, filename, file_content)
+                        if ret:
+                            msg += result
+                        else:
+                            msg += "- cmder failed -"
+                        msg += "\n"
                 else:
-                    with open(f"./{form['file'].filename}", "wb") as f:
-                        f.write(form["file"].file.read())
+                    filename = form["file"].name
+                    file_content = form["file"].file.read()
+                    msg += f" {filename} ".center(40, "=") + "\n"
+                    ret, result = self.cmder.execute(cmd, filename, file_content)
+                    if ret:
+                        msg += result
+                    else:
+                        msg += "- cmder failed -"
+                    msg += "\n"
+
             except IOError:
                 return (
                     False,
                     "Can't create file to write, do you have permission to write?",
                 )
-        return (True, "Files uploaded")
+        return (True, msg)
 
 
 parser = argparse.ArgumentParser()
