@@ -12,22 +12,20 @@ logger = logging.getLogger(__name__)
 
 class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
-        r, info = self.deal_post_data()
-        print(r, info, "by: ", self.client_address)
-        f = io.BytesIO()
-        if r:
-            f.write(b"Success\n")
-        else:
-            f.write(b"Failed\n")
-        length = f.tell()
-        f.seek(0)
-        self.send_response(200)
-        self.send_header("Content-type", "text/plain")
-        self.send_header("Content-Length", str(length))
-        self.end_headers()
-        if f:
+        ret, info = self.deal_post_data()
+        logger.info(f"{ret} {info} by {self.client_address}")
+        with io.BytesIO() as f:
+            if ret:
+                f.write(b"Success\n")
+            else:
+                f.write(b"Failed\n")
+            length = f.tell()
+            f.seek(0)
+            self.send_response(200)
+            self.send_header("Content-type", "text/plain")
+            self.send_header("Content-Length", str(length))
+            self.end_headers()
             self.copyfile(f, self.wfile)
-            f.close()
 
     def deal_post_data(self):
         ctype, pdict = cgi.parse_header(self.headers["Content-Type"])
@@ -42,15 +40,14 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     "CONTENT_TYPE": self.headers["Content-Type"],
                 },
             )
-            print(type(form))
             try:
                 if isinstance(form["file"], list):
                     for record in form["file"]:
-                        open(f"./{record.filename}", "wb").write(record.file.read())
+                        with open(f"./{record.filename}", "wb") as f:
+                            f.write(record.file.read())
                 else:
-                    open("./%s" % form["file"].filename, "wb").write(
-                        form["file"].file.read()
-                    )
+                    with open(f"./{form['file'].filename}", "wb") as f:
+                        f.write(form["file"].file.read())
             except IOError:
                 return (
                     False,
@@ -66,7 +63,8 @@ parser.add_argument("--port", type=int, default=8888)
 args = parser.parse_args()
 port = args.port
 
-Handler = CustomHTTPRequestHandler
-with socketserver.TCPServer(("", port), Handler) as httpd:
-    logger.info(f"serving at port: {port}")
-    httpd.serve_forever()
+if __name__ == "__main__":
+    Handler = CustomHTTPRequestHandler
+    with socketserver.TCPServer(("", port), Handler) as httpd:
+        logger.info("serving at port: %s", port)
+        httpd.serve_forever()
