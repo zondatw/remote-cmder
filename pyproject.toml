@@ -10,6 +10,11 @@ packages = [{include = "remote_cmder"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 
+[tool.poetry.dev-dependencies]
+pre-commit = "^3.0.4"
+black = "==23.1.0"
+flake8 = "==6.0.0"
+isort = "==5.12.0"
 
 [build-system]
 requires = ["poetry-core"]

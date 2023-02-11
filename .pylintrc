@@ -1,0 +1,8 @@
+[FORMAT]
+max-line-length=120
+
+[DESIGN]
+max-parents=13
+
+[TYPECHECK]
+generated-members=REQUEST,acl,users,aq_parent,"[a-zA-Z]+-set{1,2}",save,delete
