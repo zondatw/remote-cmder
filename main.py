@@ -1,10 +1,8 @@
+import argparse
 import http.server
 import socketserver
 import io
 import cgi
-
-# Change this to serve on a different port
-PORT = 44444
 
 
 class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
@@ -56,7 +54,14 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         return (True, "Files uploaded")
 
 
+parser = argparse.ArgumentParser()
+
+parser.add_argument("--port", type=int, default=8888)
+
+args = parser.parse_args()
+port = args.port
+
 Handler = CustomHTTPRequestHandler
-with socketserver.TCPServer(("", PORT), Handler) as httpd:
-    print("serving at port", PORT)
+with socketserver.TCPServer(("", port), Handler) as httpd:
+    print("serving at port", port)
     httpd.serve_forever()
