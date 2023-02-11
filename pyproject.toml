@@ -10,7 +10,8 @@ packages = [{include = "remote_cmder"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
+pylint = "^2.16.1"
 pre-commit = "^3.0.4"
 black = "==23.1.0"
 flake8 = "==6.0.0"
