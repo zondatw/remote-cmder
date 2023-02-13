@@ -12,6 +12,7 @@ poetry install
 
 ```shell
 pre-commit install --install-hooks
+pre-commit install --hook-type pre-push
 # or
 pre-commit autoupdate
 ```
