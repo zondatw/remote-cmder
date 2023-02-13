@@ -11,7 +11,7 @@ class Cmder:
         return self.__cmd_map[cmd](filename, data, *args, **kwargs)
 
     def is_cmd_supported(self, cmd):
-        return cmd in self.__cmd_map.keys()
+        return cmd in self.__cmd_map
 
     def __cmd_md5(self, filename, data, *args, **kwargs):
         m = hashlib.md5()
