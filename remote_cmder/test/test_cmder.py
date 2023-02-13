@@ -20,7 +20,7 @@ class TestCmder:
             assert self.cmder.is_cmd_supported(test_case) is False
 
     def test_cmd_md5(self):
-        result = self.cmder.md5("test", "123".encode())
+        result = self.cmder._Cmder__cmd_md5("test", "123".encode())
         assert result == (
             True,
             "test: 202cb962ac59075b964b07152d234b70",
