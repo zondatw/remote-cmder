@@ -33,3 +33,9 @@ file: ba1f2511fc30423bdbb183fe33f3dd0f
 ================= file =================
 file: ba1f2511fc30423bdbb183fe33f3dd0f
 ```
+
+## Run test
+
+```shell
+pytest .
+```
