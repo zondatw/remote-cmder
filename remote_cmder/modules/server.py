@@ -8,7 +8,7 @@ from remote_cmder.modules.cmder import Cmder
 logger = logging.getLogger(__name__)
 
 
-class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
+class CmderHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         self.cmder = Cmder()
         super().__init__(*args, **kwargs)
