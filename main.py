@@ -78,30 +78,28 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     for record in form["file"]:
                         filename = record.name
                         file_content = record.file.read()
-                        msg += f" {filename} ".center(40, "=") + "\n"
-                        ret, result = self.cmder.execute(cmd, filename, file_content)
-                        if ret:
-                            msg += result
-                        else:
-                            msg += "- cmder failed -"
-                        msg += "\n"
+                        msg += self.__cmd_response(cmd, filename, file_content)
                 else:
                     filename = form["file"].name
                     file_content = form["file"].file.read()
-                    msg += f" {filename} ".center(40, "=") + "\n"
-                    ret, result = self.cmder.execute(cmd, filename, file_content)
-                    if ret:
-                        msg += result
-                    else:
-                        msg += "- cmder failed -"
-                    msg += "\n"
-
+                    msg += self.__cmd_response(cmd, filename, file_content)
             except IOError:
                 return (
                     False,
                     "Can't create file to write, do you have permission to write?",
                 )
         return (True, msg)
+
+    def __cmd_response(self, cmd, filename, file_content):
+        msg = ""
+        msg += f" {filename} ".center(40, "=") + "\n"
+        ret, result = self.cmder.execute(cmd, filename, file_content)
+        if ret:
+            msg += result
+        else:
+            msg += "- cmder failed -"
+        msg += "\n"
+        return msg
 
 
 parser = argparse.ArgumentParser()
