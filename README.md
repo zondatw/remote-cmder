@@ -39,4 +39,6 @@ file: ba1f2511fc30423bdbb183fe33f3dd0f
 
 ```shell
 pytest .
+# or
+pytest --cov-config=.coveragerc --cov=. .
 ```
