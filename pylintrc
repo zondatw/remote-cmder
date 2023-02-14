@@ -141,7 +141,7 @@ logging-modules=logging
 
 # The type of string formatting that logging methods do. `old` means using %
 # formatting, `new` is for `{}` formatting.
-logging-format-style=old
+logging-format-style=new
 
 
 [MISCELLANEOUS]
@@ -515,7 +515,8 @@ preferred-modules=
 
 # Exceptions that will emit a warning when being caught. Defaults to
 # "Exception"
-overgeneral-exceptions=Exception
+overgeneral-exceptions=builtins.BaseException,
+                       builtins.Exception
 
 
 [TYPING]
