@@ -18,5 +18,5 @@ if __name__ == "__main__":
 
     Handler = CmderHTTPRequestHandler
     with socketserver.TCPServer(("", port), Handler) as httpd:
-        logger.info("serving at port: %s", port)
+        logger.info(f"serving at port: {port}")
         httpd.serve_forever()

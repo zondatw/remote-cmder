@@ -42,3 +42,9 @@ pytest .
 # or
 pytest --cov-config=.coveragerc --cov=. .
 ```
+
+## Run Pylint
+
+```shell
+pylint *.py remote_cmder
+```
