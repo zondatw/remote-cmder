@@ -63,3 +63,18 @@ make run
 ```shell
 make clean
 ```
+
+## Podman
+
+### Start
+
+```shell
+make -f Makefile.podman build
+make -f Makefile.podman run
+```
+
+### Stop
+
+```shell
+make -f Makefile.podman clean
+```
