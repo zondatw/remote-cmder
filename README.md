@@ -48,3 +48,18 @@ pytest --cov-config=.coveragerc --cov=. .
 ```shell
 pylint *.py remote_cmder
 ```
+
+## Docker
+
+### Start
+
+```shell
+make build
+make run
+```
+
+### Stop
+
+```shell
+make clean
+```
