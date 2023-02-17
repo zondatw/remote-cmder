@@ -1,0 +1,30 @@
+PODMAN_CMD := podman
+IMG_NAME := remote-cmder
+CONTAINER_NAME := remote-cmder
+CURRENT_PATH := $(PWD)
+PROJECT_PATH := $(CURRENT_PATH)/../
+
+all: build run
+
+build:
+	$(PODMAN_CMD) build -t $(IMG_NAME) -f docker/Dockerfile .
+
+run:
+	$(PODMAN_CMD) run --name $(CONTAINER_NAME) -it -p 8888:8888 $(IMG_NAME) python3 main.py
+
+attach:
+	$(PODMAN_CMD) exec -it $(CONTAINER_NAME) /bin/bash
+
+start:
+	$(PODMAN_CMD) start $(CONTAINER_NAME)
+
+stop:
+	$(PODMAN_CMD) stop $(CONTAINER_NAME)
+
+.PHONY: clean
+
+clean: stop clear
+
+clear:
+	$(PODMAN_CMD) rm $(CONTAINER_NAME)
+	$(PODMAN_CMD) rmi $(IMG_NAME)
