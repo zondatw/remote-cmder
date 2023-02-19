@@ -1,0 +1,32 @@
+name: Upload Test Python Package
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - uses: knowsuchagency/poetry-install@v1
+        env:
+          POETRY_VIRTUALENVS_CREATE: false
+      - name: Install dependencies
+        run: |
+          poetry install --with pypi
+      - name: Export requirements.txt
+        run : |
+          poetry export -f requirements.txt --without-hashes --output requirements.txt
+      - name: Build and publish
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: |
+          python setup.py sdist bdist_wheel
+          twine upload dist/*
