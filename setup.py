@@ -9,8 +9,8 @@ with open("requirements.txt", "r") as fh:
         requirements.append(line.strip())
 
 setuptools.setup(
-    name="remote_cmder",
-    version="0.0.1",
+    name="remote-cmder",
+    version="0.0.3",
     author="Zonda Yang",
     author_email="u226699@gmail.com",
     description="Remote cmder",
@@ -27,7 +27,7 @@ setuptools.setup(
     python_requires=">=3.7",
     entry_points={
         "console_scripts": [
-            "remote_cmder=remote_cmder.cli:main",
+            "remote-cmder=remote_cmder.cli:main",
         ],
     },
     install_requires=requirements,

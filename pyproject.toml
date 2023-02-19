@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "remote_cmder"
-version = "0.1.0"
+name = "remote-cmder"
+version = "0.0.3"
 description = ""
 authors = ["zonda yang <u226699@gmail.com>"]
 license = "MIT"

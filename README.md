@@ -1,4 +1,4 @@
-# remote_cmder
+# remote-cmder
 
 ## Prerequisites
 
