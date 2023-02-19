@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "remote-cmder"
+name = "remote_cmder"
 version = "0.1.0"
 description = ""
 authors = ["zonda yang <u226699@gmail.com>"]
