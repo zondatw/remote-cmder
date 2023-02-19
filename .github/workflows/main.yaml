@@ -19,7 +19,7 @@ jobs:
       - uses: knowsuchagency/poetry-install@v1
         env:
           POETRY_VIRTUALENVS_CREATE: false
-      - name: Install dependency
+      - name: Install dependencies
         run: |
           poetry install
       - name: Test
