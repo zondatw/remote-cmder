@@ -10,7 +10,10 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description="Remote cmder\nexample:\n\tcurl -F 'file=@test.txt' -F 'file=@test.txt' http://127.0.0.1:8888/md5\n",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
 
     parser.add_argument("--port", type=int, default=8888)
 
