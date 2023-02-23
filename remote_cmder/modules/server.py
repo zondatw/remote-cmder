@@ -4,6 +4,7 @@ import cgi
 import logging
 
 from remote_cmder.modules.cmder import Cmder
+from remote_cmder.modules.cmd import default_cmd_map
 
 logger = logging.getLogger(__name__)
 
@@ -11,6 +12,7 @@ logger = logging.getLogger(__name__)
 class CmderHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         self.cmder = Cmder()
+        self.cmder.registers(default_cmd_map)
         super().__init__(*args, **kwargs)
 
     def do_POST(self):
