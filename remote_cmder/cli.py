@@ -3,7 +3,9 @@ import logging
 import socketserver
 
 from .settings import init_settings
-from .modules.server import CmderHTTPRequestHandler
+from .modules.server import create_cmder_http_request_handler
+from .modules.cmder import Cmder
+from .modules.cmd import default_cmd_map
 
 init_settings()
 logger = logging.getLogger(__name__)
@@ -20,8 +22,10 @@ def main():
     args = parser.parse_args()
     port = args.port
 
-    Handler = CmderHTTPRequestHandler
-    with socketserver.TCPServer(("", port), Handler) as httpd:
+    cmder = Cmder()
+    cmder.registers(default_cmd_map)
+    cmder_http_request_handler = create_cmder_http_request_handler(cmder)
+    with socketserver.TCPServer(("", port), cmder_http_request_handler) as httpd:
         logger.info(f"serving at port: {port}")
         httpd.serve_forever()
 
