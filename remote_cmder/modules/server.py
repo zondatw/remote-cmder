@@ -53,11 +53,11 @@ def create_cmder_http_request_handler(cmder):
                 try:
                     if isinstance(form["file"], list):
                         for record in form["file"]:
-                            filename = record.name
+                            filename = record.filename
                             file_content = record.file.read()
                             msg += self.__cmd_response(cmd, filename, file_content)
                     else:
-                        filename = form["file"].name
+                        filename = form["file"].filename
                         file_content = form["file"].file.read()
                         msg += self.__cmd_response(cmd, filename, file_content)
                 except IOError:

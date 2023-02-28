@@ -29,10 +29,10 @@ $ python main.py
 
 ```shell
 $ curl -F 'file=@test.txt' -F 'file=@test.txt' http://127.0.0.1:8888/md5
-================= file =================
-file: ba1f2511fc30423bdbb183fe33f3dd0f
-================= file =================
-file: ba1f2511fc30423bdbb183fe33f3dd0f
+================= test.txt =================
+test.txt: ba1f2511fc30423bdbb183fe33f3dd0f
+================= test.txt =================
+test.txt: ba1f2511fc30423bdbb183fe33f3dd0f
 ```
 
 ## Run test
