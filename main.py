@@ -4,7 +4,7 @@ import socketserver
 
 from remote_cmder.settings import init_settings
 from remote_cmder.modules.server import create_cmder_http_request_handler
-from remote_cmder.modules.cmder import Cmder
+from remote_cmder.modules.cmder import Cmder, CmderResponse
 from remote_cmder.modules.cmd import default_cmd_map
 
 init_settings()
@@ -13,9 +13,9 @@ logger = logging.getLogger(__name__)
 
 def cmd_demo_response_haha(filename, data, *args, **kwargs):
     response_data = "haha"
-    return (
-        True,
-        f"Got {data} from {filename}, and get new word: {response_data}",
+    return CmderResponse(
+        result=True,
+        msg=f"Got {data} from {filename}, and get new word: {response_data}",
     )
 
 

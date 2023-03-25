@@ -1,4 +1,4 @@
-from remote_cmder.modules.cmder import Cmder
+from remote_cmder.modules.cmder import Cmder, CmderResponse
 from remote_cmder.modules.cmd import default_cmd_map
 
 
@@ -76,14 +76,14 @@ class TestCmder:
 
     def test_cmd_md5(self):
         exec_result = self.cmder.execute("md5", "test", "123".encode())
-        assert exec_result == (
-            True,
-            "test: 202cb962ac59075b964b07152d234b70",
+        assert exec_result == CmderResponse(
+            result=True,
+            msg="test: 202cb962ac59075b964b07152d234b70",
         )
 
     def test_cmd_sha1(self):
         exec_result = self.cmder.execute("sha1", "test", "123".encode())
-        assert exec_result == (
-            True,
-            "test: 40bd001563085fc35165329ea1ff5c5ecbdbbeef",
+        assert exec_result == CmderResponse(
+            result=True,
+            msg="test: 40bd001563085fc35165329ea1ff5c5ecbdbbeef",
         )

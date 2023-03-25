@@ -1,3 +1,6 @@
+from dataclasses import dataclass
+
+
 class Cmder:
     def __init__(self):
         self.__cmd_map = {}
@@ -13,3 +16,9 @@ class Cmder:
 
     def registers(self, cmd_map):
         self.__cmd_map.update(cmd_map)
+
+
+@dataclass
+class CmderResponse:
+    result: bool
+    msg: str
