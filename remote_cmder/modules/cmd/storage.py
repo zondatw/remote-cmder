@@ -15,7 +15,7 @@ def storage_upload(filename, data, *args, **kwargs):
 
     return CmderResponse(
         result=True,
-        data=f"{filename} is stored in {stored_path}",
+        data=f"{filename} is stored in {stored_path}".encode(),
         type=ResponseType.Plain,
     )
 

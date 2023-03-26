@@ -23,5 +23,5 @@ class Cmder:
 @dataclass
 class CmderResponse:
     result: bool
-    data: str
+    data: bytes
     type: ResponseType

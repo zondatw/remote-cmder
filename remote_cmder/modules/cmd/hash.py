@@ -10,7 +10,7 @@ def hash_md5(filename, data, *args, **kwargs):
     h = m.hexdigest()
     return CmderResponse(
         result=True,
-        data=f"{filename}: {h}",
+        data=f"{filename}: {h}".encode(),
         type=ResponseType.Plain,
     )
 
@@ -21,7 +21,7 @@ def hash_sha1(filename, data, *args, **kwargs):
     h = m.hexdigest()
     return CmderResponse(
         result=True,
-        data=f"{filename}: {h}",
+        data=f"{filename}: {h}".encode(),
         type=ResponseType.Plain,
     )
 

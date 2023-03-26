@@ -4,12 +4,20 @@ from remote_cmder.core.enums import ResponseType
 
 
 def register_func(filename, data, *args, **kwargs):
-    return (True, f"filename: {filename}, data: {data}")
+    return CmderResponse(
+        result=True,
+        data=f"filename: {filename}, data: {data.decode()}".encode(),
+        type=ResponseType.Plain,
+    )
 
 
 def registers_func(test_cmd):
     def func(filename, data, *args, **kwargs):
-        return (True, f"[{test_cmd}] filename: {filename}, data: {data}")
+        return CmderResponse(
+            result=True,
+            data=f"[{test_cmd}] filename: {filename}, data: {data.decode()}".encode(),
+            type=ResponseType.Plain,
+        )
 
     return func
 
@@ -26,9 +34,12 @@ class TestCmderRegister:
 
         test_filename = "test_filename"
         test_data = "test_data"
-        assert self.cmder.execute(test_cmd, "test_filename", "test_data") == (
-            True,
-            f"filename: {test_filename}, data: {test_data}",
+        assert self.cmder.execute(
+            test_cmd, "test_filename", "test_data".encode()
+        ) == CmderResponse(
+            result=True,
+            data=f"filename: {test_filename}, data: {test_data}".encode(),
+            type=ResponseType.Plain,
         )
 
     def test_registers(self):
@@ -49,9 +60,12 @@ class TestCmderRegister:
         for test_cmd in test_cmd_list:
             test_filename = "test_filename"
             test_data = "test_data"
-            assert self.cmder.execute(test_cmd, "test_filename", "test_data") == (
-                True,
-                f"[{test_cmd}] filename: {test_filename}, data: {test_data}",
+            assert self.cmder.execute(
+                test_cmd, "test_filename", "test_data".encode()
+            ) == CmderResponse(
+                result=True,
+                data=f"[{test_cmd}] filename: {test_filename}, data: {test_data}".encode(),
+                type=ResponseType.Plain,
             )
 
 
@@ -79,7 +93,7 @@ class TestCmder:
         exec_result = self.cmder.execute("md5", "test", "123".encode())
         assert exec_result == CmderResponse(
             result=True,
-            data="test: 202cb962ac59075b964b07152d234b70",
+            data=b"test: 202cb962ac59075b964b07152d234b70",
             type=ResponseType.Plain,
         )
 
@@ -87,6 +101,6 @@ class TestCmder:
         exec_result = self.cmder.execute("sha1", "test", "123".encode())
         assert exec_result == CmderResponse(
             result=True,
-            data="test: 40bd001563085fc35165329ea1ff5c5ecbdbbeef",
+            data=b"test: 40bd001563085fc35165329ea1ff5c5ecbdbbeef",
             type=ResponseType.Plain,
         )
