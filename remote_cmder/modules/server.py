@@ -49,14 +49,14 @@ def create_cmder_http_request_handler(cmder):
 
         def post_cmder(self):
             if not self.cmder:
-                return (False, "Cmder doesn't created", ResponseType.Plain)
+                return (False, b"Cmder doesn't created", ResponseType.Plain)
 
             cmd = self.path[1:]
             if not self.cmder.is_cmd_supported(cmd):
-                return (False, "Cmd doesn't supported", ResponseType.Plain)
+                return (False, b"Cmd doesn't supported", ResponseType.Plain)
 
             ctype, _ = cgi.parse_header(self.headers["Content-Type"])
-            msg = ""
+            msg = b""
             if ctype == "multipart/form-data":
                 form = cgi.FieldStorage(
                     fp=self.rfile,
@@ -72,28 +72,52 @@ def create_cmder_http_request_handler(cmder):
                         for record in form["file"]:
                             filename = record.filename
                             file_content = record.file.read()
-                            msg += self.__cmd_response(cmd, filename, file_content)
+                            result, data, response_type = self.__cmd_response(
+                                cmd, filename, file_content
+                            )
+                            if response_type == ResponseType.File and not result:
+                                return (
+                                    False,
+                                    b"File response failed",
+                                    ResponseType.Plain,
+                                )
+                            else:
+                                msg += data
                     else:
                         filename = form["file"].filename
                         file_content = form["file"].file.read()
-                        msg += self.__cmd_response(cmd, filename, file_content)
+                        result, data, response_type = self.__cmd_response(
+                            cmd, filename, file_content
+                        )
+                        if response_type == ResponseType.File and not result:
+                            return (
+                                False,
+                                b"File response failed",
+                                ResponseType.Plain,
+                            )
+                        else:
+                            msg += data
                 except IOError:
                     return (
                         False,
-                        "Can't create file to write, do you have permission to write?",
+                        b"Can't create file to write, do you have permission to write?",
                         ResponseType.Plain,
                     )
             return (True, msg, response_type)
 
         def __cmd_response(self, cmd, filename, file_content):
-            msg = ""
-            msg += f" {filename} ".center(40, "=") + "\n"
             cmder_response = self.cmder.execute(cmd, filename, file_content)
-            if cmder_response.result:
-                msg += cmder_response.data
+            data = b""
+            if cmder_response.type == ResponseType.File:
+                if cmder_response.result:
+                    data += cmder_response.data
             else:
-                msg += "- cmder failed -"
-            msg += "\n"
-            return msg
+                data += f" {filename} ".center(40, "=").encode() + b"\n"
+                if cmder_response.result:
+                    data += cmder_response.data
+                else:
+                    data += b"- cmder failed -"
+                data += b"\n"
+            return cmder_response.result, data, cmder_response.type
 
     return CmderHTTPRequestHandler
