@@ -1,5 +1,6 @@
 from remote_cmder.modules.cmder import Cmder, CmderResponse
 from remote_cmder.modules.cmd import default_cmd_map
+from remote_cmder.core.enums import ResponseType
 
 
 def register_func(filename, data, *args, **kwargs):
@@ -78,12 +79,14 @@ class TestCmder:
         exec_result = self.cmder.execute("md5", "test", "123".encode())
         assert exec_result == CmderResponse(
             result=True,
-            msg="test: 202cb962ac59075b964b07152d234b70",
+            data="test: 202cb962ac59075b964b07152d234b70",
+            type=ResponseType.Plain,
         )
 
     def test_cmd_sha1(self):
         exec_result = self.cmder.execute("sha1", "test", "123".encode())
         assert exec_result == CmderResponse(
             result=True,
-            msg="test: 40bd001563085fc35165329ea1ff5c5ecbdbbeef",
+            data="test: 40bd001563085fc35165329ea1ff5c5ecbdbbeef",
+            type=ResponseType.Plain,
         )

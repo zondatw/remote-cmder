@@ -1,6 +1,8 @@
 import os.path
 
 from remote_cmder import settings
+from remote_cmder.modules.cmder import CmderResponse
+from remote_cmder.core.enums import ResponseType
 
 
 def storage_upload(filename, data, *args, **kwargs):
@@ -11,9 +13,10 @@ def storage_upload(filename, data, *args, **kwargs):
     with open(stored_path, "wb") as f:
         f.write(data)
 
-    return (
-        True,
-        f"{filename} is stored in {stored_path}",
+    return CmderResponse(
+        result=True,
+        data=f"{filename} is stored in {stored_path}",
+        type=ResponseType.Plain,
     )
 
 

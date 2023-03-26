@@ -1,6 +1,7 @@
 import hashlib
 
 from remote_cmder.modules.cmder import CmderResponse
+from remote_cmder.core.enums import ResponseType
 
 
 def hash_md5(filename, data, *args, **kwargs):
@@ -9,7 +10,8 @@ def hash_md5(filename, data, *args, **kwargs):
     h = m.hexdigest()
     return CmderResponse(
         result=True,
-        msg=f"{filename}: {h}",
+        data=f"{filename}: {h}",
+        type=ResponseType.Plain,
     )
 
 
@@ -19,7 +21,8 @@ def hash_sha1(filename, data, *args, **kwargs):
     h = m.hexdigest()
     return CmderResponse(
         result=True,
-        msg=f"{filename}: {h}",
+        data=f"{filename}: {h}",
+        type=ResponseType.Plain,
     )
 
 

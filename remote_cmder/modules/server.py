@@ -90,7 +90,7 @@ def create_cmder_http_request_handler(cmder):
             msg += f" {filename} ".center(40, "=") + "\n"
             cmder_response = self.cmder.execute(cmd, filename, file_content)
             if cmder_response.result:
-                msg += cmder_response.msg
+                msg += cmder_response.data
             else:
                 msg += "- cmder failed -"
             msg += "\n"

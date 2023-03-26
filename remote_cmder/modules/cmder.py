@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from remote_cmder.core.enums import ResponseType
+
 
 class Cmder:
     def __init__(self):
@@ -21,4 +23,5 @@ class Cmder:
 @dataclass
 class CmderResponse:
     result: bool
-    msg: str
+    data: str
+    type: ResponseType
