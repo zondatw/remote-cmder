@@ -6,6 +6,7 @@ from remote_cmder.settings import init_settings
 from remote_cmder.modules.server import create_cmder_http_request_handler
 from remote_cmder.modules.cmder import Cmder, CmderResponse
 from remote_cmder.modules.cmd import default_cmd_map
+from remote_cmder.core.enums import ResponseType
 
 init_settings()
 logger = logging.getLogger(__name__)
@@ -15,7 +16,8 @@ def cmd_demo_response_haha(filename, data, *args, **kwargs):
     response_data = "haha"
     return CmderResponse(
         result=True,
-        msg=f"Got {data} from {filename}, and get new word: {response_data}",
+        data=f"Got {data} from {filename}, and get new word: {response_data}".encode(),
+        type=ResponseType.Plain,
     )
 
 

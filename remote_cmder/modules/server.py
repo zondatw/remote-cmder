@@ -19,22 +19,26 @@ def create_cmder_http_request_handler(cmder):
             logger.info(f"{ret} {data} by {self.client_address}: {self.path}")
             with io.BytesIO() as f:
                 http_status = 400
-                if ret:
-                    f.write(f"{data}\n".encode())
-                    http_status = 200
-                else:
-                    f.write(f"Failed: {data}\n".encode())
-                    http_status = 400
-                length = f.tell()
-                f.seek(0)
 
                 if response_type == ResponseType.Plain:
+                    if ret:
+                        f.write(data + b"\n")
+                        http_status = 200
+                    else:
+                        f.write(b"Failed: " + data + b"\n")
+                        http_status = 400
+                    length = f.tell()
+                    f.seek(0)
                     self.send_response(http_status)
                     self.send_header("Content-type", "text/plain")
                     self.send_header("Content-Length", str(length))
                     self.end_headers()
                     self.copyfile(f, self.wfile)
                 elif response_type == ResponseType.File:
+                    f.write(data)
+                    http_status = 200
+                    length = f.tell()
+                    f.seek(0)
                     self.send_response(http_status)
                     self.send_header("Content-type", "application/octet-stream")
                     self.send_header("Content-Length", str(length))
