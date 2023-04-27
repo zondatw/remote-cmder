@@ -23,7 +23,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
     ],
     keywords="remote cmder",
-    packages=["remote_cmder", "remote_cmder.modules", "remote_cmder.settings"],
+    packages=["remote_cmder", "remote_cmder.modules", "remote_cmder.settings", "remote_cmder.core"],
     python_requires=">=3.7",
     entry_points={
         "console_scripts": [
