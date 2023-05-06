@@ -10,7 +10,7 @@ with open("requirements.txt", "r") as fh:
 
 setuptools.setup(
     name="remote-cmder",
-    version="0.0.6",
+    version="0.0.7",
     author="Zonda Yang",
     author_email="u226699@gmail.com",
     description="Remote cmder",
