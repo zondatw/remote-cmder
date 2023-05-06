@@ -10,7 +10,7 @@ with open("requirements.txt", "r") as fh:
 
 setuptools.setup(
     name="remote-cmder",
-    version="0.0.6",
+    version="0.0.7",
     author="Zonda Yang",
     author_email="u226699@gmail.com",
     description="Remote cmder",
@@ -23,7 +23,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
     ],
     keywords="remote cmder",
-    packages=["remote_cmder", "remote_cmder.modules", "remote_cmder.settings"],
+    packages=["remote_cmder", "remote_cmder.modules", "remote_cmder.settings", "remote_cmder.core"],
     python_requires=">=3.7",
     entry_points={
         "console_scripts": [
